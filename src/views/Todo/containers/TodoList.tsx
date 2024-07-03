@@ -34,6 +34,8 @@ const TodoList = () => {
 
   const handleDeleteTask = (id: number) => {
     dispatch(todoActions.removeTodo(id));
+    dispatch(todoActions.loadTodos());
+
   };
 
   return (
