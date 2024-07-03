@@ -3,9 +3,8 @@ import { makeStyles, createStyles } from '@material-ui/core/styles';
 import { Button, TextField } from '@material-ui/core';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { TaskSchema } from '../../../services/validationSchemas';
-import { useDispatch } from 'react-redux';
-import { TodoActions } from '../actions';
 import { Task } from '../../../types/Task';
+import { useTaskStore } from '../../../stores/useTaskStore';
 
 const useStyles = makeStyles(theme =>
   createStyles({
@@ -35,8 +34,8 @@ type AddToDoProps = {
 
 const AddTodo = ({ onAddTask }: AddToDoProps) => {
   const classes = useStyles();
-  const dispatch = useDispatch();
-  const todoActions = new TodoActions();
+
+  const addTask = useTaskStore(state => state.addTask);
 
   const initialValues = {
     title: '',
@@ -50,8 +49,7 @@ const AddTodo = ({ onAddTask }: AddToDoProps) => {
       description: values.description,
     };
 
-    dispatch(todoActions.addTodo(newTask));
-
+    addTask(newTask);
     if (onAddTask) {
       onAddTask();
     }

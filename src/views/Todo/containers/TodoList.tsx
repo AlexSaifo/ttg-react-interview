@@ -1,10 +1,10 @@
 import React from 'react';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
-import { useDispatch, useSelector } from 'react-redux';
-import { TodoActions } from '../actions';
 import AddTodo from '../components/AddTodo';
 import TaskList from '../components/TaskList';
-import { Box, Paper, Typography } from '@material-ui/core';
+import { Paper, Typography } from '@material-ui/core';
+import { useTaskStore } from '../../../stores/useTaskStore';
+import TaskService from '../../../services/TasksService';
 
 const useStyles = makeStyles(theme =>
   createStyles({
@@ -24,18 +24,18 @@ const useStyles = makeStyles(theme =>
 
 const TodoList = () => {
   const classes = useStyles();
-  const dispatch = useDispatch();
-  const tasks = useSelector((state: any) => state.todo.tasks);
-  const todoActions = new TodoActions();
+  const taskService = new TaskService();
+
+  const removeTask = useTaskStore(state => state.removeTask);
+  const loadTasks = useTaskStore(state => state.loadTasks);
+  const tasks = useTaskStore(state => state.tasks);
 
   const handleAddTask = () => {
-    dispatch(todoActions.loadTodos());
+    loadTasks(taskService.getTasks());
   };
 
   const handleDeleteTask = (id: number) => {
-    dispatch(todoActions.removeTodo(id));
-    dispatch(todoActions.loadTodos());
-
+    removeTask(id);
   };
 
   return (
